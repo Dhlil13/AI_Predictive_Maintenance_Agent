@@ -1,93 +1,238 @@
-🤖 AI Agent for Predictive Maintenance
+ 🤖 AI Predictive Maintenance Agent
 
-This project is an AI-powered predictive maintenance system that integrates real-time machine monitoring, failure prediction, and a RAG (Retrieval-Augmented Generation) knowledge assistant for maintenance and troubleshooting.
+## 📌 Présentation
 
-It includes:
-📊 Interactive Dashboard for monitoring machine health
-⚡ Failure Predictions using predictive models
-🧠 AI Chatbot with RAG to answer maintenance & troubleshooting questions from manuals
-🗄️ Database Integration (MySQL) for machine readings & metadata
-🌐 Frontend (HTML/JS) for chatbot interaction
+Ce projet propose une implémentation d'un **assistant intelligent de maintenance prédictive** combinant :
 
-📂 Project Structure
+- un système **RAG (Retrieval-Augmented Generation)** pour répondre à des questions techniques à partir d'une documentation industrielle ;
+- un modèle de **Machine Learning** permettant d'estimer le risque de défaillance d'une machine ;
+- un **Dashboard Streamlit** offrant une interface utilisateur interactive pour l'exploration des données, la prédiction et l'utilisation du chatbot.
 
-Predictive_Maintenance/
-│── backend/                 # AI & backend logic
-│   ├── ingest.py             # PDF ingestion & vectorstore creation
-│   ├── rag_agent.py          # RAG agent for Q&A
-│   ├── main.py               # API entry point
-│   ├── db_utils.py           # MySQL utilities
+Le projet a été développé dans un objectif pédagogique afin d'illustrer les principales briques de l'IA générative appliquées au domaine industriel.
+
+---
+
+# 🏗️ Architecture du projet
+
+```
+┌─────────────────────┐
+│ Maintenance Manual │
+│ (PDF) │
+└──────────┬──────────┘
 │
-│── data/
-│   └── User_Manual.pdf       # Knowledge base for RAG
+Document Chunking
 │
-│── vectorstore/              # FAISS vector DB for retrieval
+Vector Embeddings
 │
-│── frontend/                 # Frontend (chatbot UI)
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
+FAISS Index
 │
-│── dashboard.py              # Streamlit machine monitoring dashboard
-│── requirements.txt          # Python dependencies
-│── .gitignore                # Ignoring secrets like .env
-│── .env.example              # Example env file (without secrets)
-│── README.md                 # Project documentation
+Similarity Search
+│
+▼
+TinyLlama (GGUF)
+│
+▼
+Maintenance Assistant
+│
+▼
+Streamlit Dashboard
+▲
+│
+AI4I Predictive Maintenance Dataset
+│
+Machine Learning Model
+│
+▼
+Failure Probability Prediction
+```
+
+---
+
+# 🚀 Fonctionnalités
+
+## 🤖 Assistant IA (RAG)
+
+- Recherche sémantique dans un manuel de maintenance
+- Génération de réponses contextualisées
+- Modèle LLM exécuté entièrement en local
+- Aucune dépendance à une API externe
+
+---
+
+## 🔮 Maintenance prédictive
+
+Le projet intègre un modèle de Machine Learning entraîné sur le jeu de données **AI4I 2020 Predictive Maintenance Dataset** permettant de :
+
+- prédire le risque de défaillance ;
+- estimer la probabilité de panne ;
+- illustrer un cas d'usage industriel de maintenance prédictive.
+
+---
+
+## 📊 Dashboard interactif
+
+Le tableau de bord permet :
+
+- d'interroger le chatbot RAG ;
+- d'explorer le dataset ;
+- de visualiser les statistiques descriptives ;
+- d'effectuer des prédictions de défaillance à partir de paramètres saisis par l'utilisateur.
+
+---
+
+# 📂 Structure du projet
+
+```
+AI_Predictive_Maintenance_Agent/
+
+│
+├── backend/
+│ ├── ingest.py
+│ ├── rag_agent.py
+│ ├── main.py
+│ ├── models/
+│ └── data/
+│
+├── datasets/
+│ └── ai4i2020.csv
+│
+├── ml/
+│ ├── train_model.py
+│ ├── predict.py
+│ ├── model.pkl
+│ └── scaler.pkl
+│
+├── vectorstore/
+│
+├── dashboard.py
+│
+├── requirements.txt
+│
+└── README.md
+```
+
+---
+
+# 🧠 Technologies utilisées
+
+## IA Générative
+
+- TinyLlama 1.1B Chat (GGUF)
+- llama-cpp-python
+- FAISS
+- LangChain Community
+
+## Machine Learning
+
+- Scikit-Learn
+- Pandas
+- NumPy
+- Joblib
+
+## Interface
+
+- Streamlit
+- Plotly
+
+ API
+
+- FastAPI
+- Uvicorn
+
+---
+
+📚 Jeu de données
+
+Le modèle de Machine Learning est entraîné sur :
+
+**AI4I 2020 Predictive Maintenance Dataset**
+
+Variables principales :
+
+- Air Temperature
+- Process Temperature
+- Rotational Speed
+- Torque
+- Tool Wear
+
+Variable cible :
+
+- Machine Failure
+
+
 ⚙️ Installation
 
-1️⃣ Clone the Repository
-git clone https://github.com/your_username/AI_Agent__Predictive_Maintenance.git
-cd AI_Agent__Predictive_Maintenance
+Créer un environnement Python :
 
-2️⃣ Create Virtual Environment
-conda create -n predictive_maintain python=3.10 -y
-conda activate predictive_maintain
-Or using venv:
-python -m venv venv
-source venv/bin/activate   # macOS/Linux
-venv\Scripts\activate      # Windows
+bash
+conda create -n rag_pdm python=3.10
+conda activate rag_pdm
 
-3️⃣ Install Dependencies
+Installer les dépendances :
+bash
 pip install -r requirements.txt
 
-4️⃣ Setup Environment Variables
-Create a .env file in the project root:
-OPENAI_API_KEY=your_api_key_here
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_password_here
-DB_NAME=ignitiondb
 
-⚠️ Never commit .env. Share .env.example instead.
+▶️ Création de la base vectorielle
 
-🚀 Running the Project
-1️⃣ Start Backend API
-python backend/main.py
-2️⃣ Ingest Knowledge Base (PDF → Vectorstore)
+Placer les documents PDF dans :
+backend/data/
+
+Puis lancer :
 python backend/ingest.py
-3️⃣ Run Streamlit Dashboard
+
+▶️ Lancer le backend
+
+Depuis le dossier backend :
+
+bash
+uvicorn main:app --reload
+
+Documentation FastAPI :
+http://127.0.0.1:8000/docs
+
+
+▶️ Lancer le Dashboard
+
+Depuis la racine du projet :
+
+```bash
 streamlit run dashboard.py
-4️⃣ Open Frontend (Chatbot)
-Open frontend/index.html in your browser.
+```
 
-✨ Features
-📊 Dashboard:
-Real-time machine monitoring
-Alerts & thresholds visualization
-RUL (Remaining Useful Life) predictions
-Machine comparison
+---
 
-🧠 AI Chatbot (RAG):
-Answers machine-specific queries
-Troubleshooting guidance from manuals
-Maintenance procedures
+💬 Exemples de questions
 
-🔒 Safe Development:
-.env for secrets
-.gitignore included
+Le chatbot peut répondre à des questions telles que :
 
-📖 Example Queries
-"Give me the details of machine 1"
-"How do I reduce vibration in machine 2?"
-"What maintenance steps are needed for a compressor?"
-"Show me temperature trend of machine 3"
+- What causes bearing overheating?
+- How can excessive vibration be reduced?
+- What maintenance should be performed regularly?
+- What are the symptoms of bearing failure?
+- How should bearings be lubricated?
+
+
+
+🎯 Objectifs pédagogiques
+
+Ce projet illustre :
+
+- la construction d'un système RAG ;
+- l'utilisation d'une base vectorielle FAISS ;
+- l'intégration d'un modèle de langage local ;
+- le développement d'un assistant IA spécialisé ;
+- l'application du Machine Learning à la maintenance prédictive.
+
+Il constitue un support de travaux pratiques pour un cours d'**IA Générative appliquée à l'industrie**.
+
+
+🔄 Perspectives
+
+Évolutions possibles :
+
+- intégration complète ML + RAG ;
+- estimation du Remaining Useful Life (RUL) ;
+- prise en charge de plusieurs manuels techniques ;
+- connexion à une base de données temps réel ;
+- intégration de données IoT industrielles.
